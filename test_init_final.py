@@ -1274,8 +1274,8 @@ class mainCog(commands.Cog):
 					color=0xff00ff
 					)
 			embed.add_field(
-					name="----- 세류서버 -----",
-					value= '```악인```'
+					name="----- 세류서버 연합-----",
+					value= '```멸망 멸시 악인```'
 					)
 			await ctx.send(embed=embed, tts=False)
 		else:
