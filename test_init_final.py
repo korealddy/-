@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*- 
 
-################ Server Ver. 22 (2020. 9. 29.) #####################
+################ Server Ver. 22 (2020. 9. 30.) #####################
 
 import sys, os
 import asyncio, discord, aiohttp
@@ -434,14 +434,14 @@ def init():
 		f = []
 
 	regenembed = discord.Embed(
-			title='----- 보스별 리스폰 시간 -----',
+			title='----- 보스별 젠 시간 -----',
 			description= ' ')
 	for i in range(len(regenTime)):
 		if outputTimeMin[i] == 0 :
 			regenembed.add_field(name=str(outputTimeHour[i]) + '시간', value= '```'+ ', '.join(map(str, sorted(regenbossName[i]))) + '```', inline=False)
 		else :
 			regenembed.add_field(name=str(outputTimeHour[i]) + '시간' + str(outputTimeMin[i]) + '분', value= '```' + ','.join(map(str, sorted(regenbossName[i]))) + '```', inline=False)
-	regenembed.set_footer(text = 'R : 멍 보스')
+	regenembed.set_footer(text = 'R : 놓친 보스')
 
 	##########################################################
 
@@ -527,14 +527,14 @@ async def dbSave():
 				if bossTimeString[i] != '99:99:99' or bossMungFlag[i] == True :
 					if bossMungFlag[i] == True :
 						if bossData[i][2] == '0' :
-							information1 += ' - ' + bossData[i][0] + '(' + bossData[i][1] + '.' + bossData[i][5] + ') : ' + tmp_bossTime[i].strftime('%H:%M:%S') + ' @ ' + tmp_bossTime[i].strftime('%Y-%m-%d') + ' (미입력 ' + str(bossMungCnt[i]) + '회)' + ' * ' + bossData[i][6] + '\n'
+							information1 += ' - ' + bossData[i][0] + '(' + bossData[i][1] + '.' + bossData[i][5] + ') : ' + tmp_bossTime[i].strftime('%H:%M:%S') + ' @ ' + tmp_bossTime[i].strftime('%Y-%m-%d') + ' (놓친 횟수 ' + str(bossMungCnt[i]) + '회)' + ' * ' + bossData[i][6] + '\n'
 						else : 
-							information1 += ' - ' + bossData[i][0] + '(' + bossData[i][1] + '.' + bossData[i][5] + ') : ' + tmp_bossTime[i].strftime('%H:%M:%S') + ' @ ' + tmp_bossTime[i].strftime('%Y-%m-%d') + ' (멍 ' + str(bossMungCnt[i]) + '회)' + ' * ' + bossData[i][6] + '\n'
+							information1 += ' - ' + bossData[i][0] + '(' + bossData[i][1] + '.' + bossData[i][5] + ') : ' + tmp_bossTime[i].strftime('%H:%M:%S') + ' @ ' + tmp_bossTime[i].strftime('%Y-%m-%d') + ' (놓친 횟수 ' + str(bossMungCnt[i]) + '회)' + ' * ' + bossData[i][6] + '\n'
 					else:
 						if bossData[i][2] == '0' :
-							information1 += ' - ' + bossData[i][0] + '(' + bossData[i][1] + '.' + bossData[i][5] + ') : ' + bossTimeString[i] + ' @ ' + bossDateString[i] + ' (미입력 ' + str(bossMungCnt[i]) + '회)' + ' * ' + bossData[i][6] + '\n'
+							information1 += ' - ' + bossData[i][0] + '(' + bossData[i][1] + '.' + bossData[i][5] + ') : ' + bossTimeString[i] + ' @ ' + bossDateString[i] + ' (놓친 횟수 ' + str(bossMungCnt[i]) + '회)' + ' * ' + bossData[i][6] + '\n'
 						else : 
-							information1 += ' - ' + bossData[i][0] + '(' + bossData[i][1] + '.' + bossData[i][5] + ') : ' + bossTimeString[i] + ' @ ' + bossDateString[i] + ' (멍 ' + str(bossMungCnt[i]) + '회)' + ' * ' + bossData[i][6] + '\n'
+							information1 += ' - ' + bossData[i][0] + '(' + bossData[i][1] + '.' + bossData[i][5] + ') : ' + bossTimeString[i] + ' @ ' + bossDateString[i] + ' (놓친 횟수 ' + str(bossMungCnt[i]) + '회)' + ' * ' + bossData[i][6] + '\n'
 						
 	try :
 		contents = repo.get_contents("my_bot.db")
@@ -637,16 +637,6 @@ async def FixedBossDateSave():
 	contents = repo.get_contents("fixed_boss.ini")
 	repo.update_file(contents.path, "bossDB", FixedBossDateDataSTR, contents.sha)
 
-#사다리함수		
-async def LadderFunc(number, ladderlist, channelVal):
-	result_ladder = random.sample(ladderlist, number)
-	lose_member = [item for item in ladderlist if item not in result_ladder]
-	result_ladderSTR = ','.join(map(str, result_ladder))
-	embed = discord.Embed(title  = "🎲 사다리! 묻고 더블로 가!",color=0x00ff00)
-	embed.add_field(name = "👥 참가자", value =  f"```fix\n{', '.join(ladderlist)}```", inline=False)
-	embed.add_field(name = "😍 당첨", value =  f"```fix\n{', '.join(result_ladder)}```")
-	embed.add_field(name = "😭 낙첨", value =  f"```{', '.join(lose_member)}```")
-	await channelVal.send(embed=embed, tts=False)
 
 #data초기화
 async def init_data_list(filename, first_line : str = "-----------"):
@@ -781,7 +771,7 @@ class taskCog(commands.Cog):
 						continue
 					continue
 				t.cancel()
-		await ctx.send( '< 보탐봇 명치 맞고 숨 고르기 중! 잠시만요! >', tts=False)
+		await ctx.send( '< 악인 알리미 명치 맞고 숨 고르기 중! 잠시만요! >', tts=False)
 		print("명치!")
 		await dbSave()
 		await data_list_Save("kill_list.ini", "-----척살명단-----", kill_Data)
@@ -794,7 +784,7 @@ class taskCog(commands.Cog):
 		if basicSetting[21] != "1":
 			print("명치복구완료!")
 			await dbLoad()
-			await self.bot.get_channel(channel).send( '< 다시 왔습니다!(보이스 미사용) >', tts=False)
+			await self.bot.get_channel(channel).send( '< 알리미 고쳐졌습니다..!(보이스 미사용) >', tts=False)
 
 		boss_task = asyncio.Task(self.boss_check())
 		return
@@ -894,11 +884,6 @@ class taskCog(commands.Cog):
 					else:
 						contents12 = repo_restart.get_contents("restart.txt")
 						repo_restart.update_file(contents12.path, "restart_1", "", contents12.sha)
-				
-				################ 킬 목록 초기화 ################ 
-				if kill_Time.strftime('%Y-%m-%d ') + kill_Time.strftime('%H:%M') == now.strftime('%Y-%m-%d ') + now.strftime('%H:%M'):
-					kill_Time = kill_Time + datetime.timedelta(days=int(1))
-					await init_data_list('kill_list.ini', '-----척살명단-----')
 
 				################ 고정 보스 확인 ################ 
 				for i in range(fixed_bossNum):
@@ -1017,11 +1002,11 @@ class taskCog(commands.Cog):
 									bossMungFlag[i] = False
 									bossMungCnt[i] = 0
 									if bossData[i][2] == '0':
-										await self.bot.get_channel(channel).send(f'```자동 미입력 횟수 {basicSetting[17]}회 초과! [{bossData[i][0]}] 삭제!```', tts=False)
-										print ('자동미입력 횟수초과 <' + bossData[i][0] + ' 삭제완료>')
+										await self.bot.get_channel(channel).send(f'```잡지 않은 횟수 {basicSetting[17]}회 초과! [{bossData[i][0]}] 삭제!```', tts=False)
+										print ('잡지 않은 횟수 <' + bossData[i][0] + ' 삭제완료>')
 									else:
-										await self.bot.get_channel(channel).send(f'```자동 멍처리 횟수 {basicSetting[17]}회 초과! [{bossData[i][0]}] 삭제!```', tts=False)
-										print ('자동멍처리 횟수초과 <' + bossData[i][0] + ' 삭제완료>')
+										await self.bot.get_channel(channel).send(f'```잡지 않은 횟수 {basicSetting[17]}회 초과! [{bossData[i][0]}] 삭제!```', tts=False)
+										print ('잡지 않은 횟수 <' + bossData[i][0] + ' 삭제완료>')
 									#await dbSave()
 									
 								else:
@@ -1034,7 +1019,7 @@ class taskCog(commands.Cog):
 										tmp_bossTime[i] = bossTime[i] = nextTime = tmp_bossTime[i]+datetime.timedelta(hours=int(bossData[i][1]), minutes=int(bossData[i][5]))
 										tmp_bossTimeString[i] = bossTimeString[i] = nextTime.strftime('%H:%M:%S')
 										tmp_bossDateString[i] = bossDateString[i] = nextTime.strftime('%Y-%m-%d')
-										await self.bot.get_channel(channel).send("```" +  bossData[i][0] + ' 미입력 됐습니다.```', tts=False)
+										await self.bot.get_channel(channel).send("```" +  bossData[i][0] + ' 놓쳤습니다...```', tts=False)
 										embed = discord.Embed(
 											description= '```다음 ' + bossData[i][0] + ' ' + bossTimeString[i] + '입니다.```',
 											color=0xff0000
@@ -1054,7 +1039,7 @@ class taskCog(commands.Cog):
 										tmp_bossTime[i] = bossTime[i] = nextTime = tmp_bossTime[i]+datetime.timedelta(hours=int(bossData[i][1]), minutes=int(bossData[i][5]))
 										tmp_bossTimeString[i] = bossTimeString[i] = nextTime.strftime('%H:%M:%S')
 										tmp_bossDateString[i] = bossDateString[i] = nextTime.strftime('%Y-%m-%d')
-										await self.bot.get_channel(channel).send("```" + bossData[i][0] + ' 멍 입니다.```')
+										await self.bot.get_channel(channel).send("```" + bossData[i][0] + ' 놓쳤습니다..```')
 										embed = discord.Embed(
 											description= '```다음 ' + bossData[i][0] + ' ' + bossTimeString[i] + '입니다.```',
 											color=0xff0000
@@ -1124,7 +1109,7 @@ class mainCog(commands.Cog):
 			contents = repo.get_contents("test_setting.ini")
 			repo.update_file(contents.path, "test_setting", result_textCH, contents.sha)
 
-			await ctx.send(f"< 텍스트채널 [{ctx.message.channel.name}] 접속완료 >\n< 음성채널 접속 후 [{command[5][0]}] 명령을 사용 하세요 >", tts=False)
+			await ctx.send(f"< 텍스트채널 [{ctx.message.channel.name}] 접속완료. >\n< 안녕하세요!", tts=False)
 			
 			print('< 텍스트채널 [' + self.bot.get_channel(basicSetting[7]).name + '] 접속완료>')
 			if basicSetting[6] != "" and basicSetting[21] == "1":
@@ -1221,38 +1206,20 @@ class mainCog(commands.Cog):
 			command_list += ','.join(command[2]) + '\n'     #!설정확인
 			command_list += ','.join(command[3]) + '\n'     #!채널확인
 			command_list += ','.join(command[4]) + ' [채널명]\n'     #!채널이동
-			command_list += ','.join(command[5]) + ' ※ 관리자만 실행 가능\n'     #!소환
 			command_list += ','.join(command[6]) + '\n'     #!불러오기
 			command_list += ','.join(command[7]) + '\n'     #!초기화
 			command_list += ','.join(command[8]) + '\n'     #!명치
 			command_list += ','.join(command[9]) + '\n'     #!재시작
 			command_list += ','.join(command[10]) + '\n'     #!미예약
-			command_list += ','.join(command[11]) + ' [인원] [금액]\n'     #!분배
-			command_list += ','.join(command[12]) + ' [뽑을인원수] [아이디1] [아이디2]...\n'     #!사다리
-			command_list += ','.join(command[27]) + ' [아이디1] [아이디2]...(최대 12명)\n'     #!경주
-			command_list += ','.join(command[35]) + ' [판매금액] (거래소세금)\n'     #!수수료
-			command_list += ','.join(command[36]) + ' [거래소금액] [실거래금액] (거래소세금)\n'     #!페이백
-			command_list += ','.join(command[13]) + ' [아이디]\n'     #!정산
 			command_list += ','.join(command[14]) + ' 또는 ' + ','.join(command[14]) + ' 0000, 00:00\n'     #!보스일괄
 			command_list += ','.join(command[15]) + '\n'     #!q
 			command_list += ','.join(command[16]) + ' [할말]\n'     #!v
 			command_list += ','.join(command[17]) + '\n'     #!리젠
 			command_list += ','.join(command[18]) + '\n'     #!현재시간
-			command_list += ','.join(command[24]) + '\n'     #!킬초기화
-			command_list += ','.join(command[25]) + '\n'     #!킬횟수 확인
-			command_list += ','.join(command[25]) + ' [아이디]\n'     #!킬
-			command_list += ','.join(command[26]) + ' [아이디]\n'     #!킬삭제
-			command_list += ','.join(command[33]) + ' [아이디] 또는 ' + ','.join(command[33]) + ' [아이디] [횟수]\n'     #!킬차감
-			command_list += ','.join(command[29]) + '\n'     #!아이템 목록 초기화
-			command_list += ','.join(command[30]) + '\n'     #!아이템 목록 확인
-			command_list += ','.join(command[30]) + ' [아이템] 또는 ' + ','.join(command[30]) + ' [아이템] [개수]\n'     #!아이템 목록 입력
-			command_list += ','.join(command[31]) + ' [아이템]\n'     #!아이템 목록에서 삭제
-			command_list += ','.join(command[32]) + ' [아이템] 또는 ' + ','.join(command[32]) + ' [아이템] [개수]\n'     #!아이템 차감
 			command_list += ','.join(command[19]) + '\n'     #!공지
 			command_list += ','.join(command[19]) + ' [공지내용]\n'     #!공지
 			command_list += ','.join(command[20]) + '\n'     #!공지삭제
 			command_list += ','.join(command[21]) + ' [할말]\n'     #!상태
-			command_list += ','.join(command[28]) + ' 사다리, 정산, 척살, 경주, 아이템\n'     #!채널설정
 			command_list += ','.join(command[34]) + ' ※ 관리자만 실행 가능\n\n'     #서버나가기
 			command_list += ','.join(command[22]) + '\n'     #보스탐
 			command_list += ','.join(command[23]) + '\n'     #!보스탐
@@ -1280,7 +1247,7 @@ class mainCog(commands.Cog):
 	async def setting_(self, ctx):	
 		#print (ctx.message.channel.id)
 		if ctx.message.channel.id == basicSetting[7]:
-			setting_val = '보탐봇버전 : Server Ver. 22 (2020. 9. 29.)\n'
+			setting_val = '악인 알리미 버젼 : Server Ver. 1 (2020. 9. 30.)\n'
 			if basicSetting[6] != "" :
 				setting_val += '음성채널 : ' + self.bot.get_channel(basicSetting[6]).name + '\n'
 			setting_val += '텍스트채널 : ' + self.bot.get_channel(basicSetting[7]).name +'\n'
@@ -1307,8 +1274,8 @@ class mainCog(commands.Cog):
 					color=0xff00ff
 					)
 			embed.add_field(
-					name="----- Special Thanks to. -----",
-					value= '```총무, 옹님, 공부중, 꽃신, 별빛, 크마, D.H.Kim, K.H.Sim, 쿠쿠, 오브로드, D.H.Oh, Bit, 팥빵, 천려, 이파리, 도미, 일깡```'
+					name="----- 세류서버 -----",
+					value= '```악인```'
 					)
 			await ctx.send(embed=embed, tts=False)
 		else:
@@ -1583,7 +1550,7 @@ class mainCog(commands.Cog):
 				if voice_client.is_playing():
 					voice_client.stop()
 				await voice_client.disconnect(force=True)
-			print("보탐봇강제재시작!")
+			print("악인 알리미 강제재시작!")
 			await asyncio.sleep(2)
 
 			inidata_restart = repo_restart.get_contents("restart.txt")
@@ -1622,7 +1589,7 @@ class mainCog(commands.Cog):
 					tmp_boss_information[0] = '``` ```'
 
 				embed = discord.Embed(
-						title = "----- 미예약 보스 -----",
+						title = "----- 잡지 않은 보스 -----",
 						description= tmp_boss_information[0],
 						color=0x0000ff
 						)
@@ -1637,7 +1604,7 @@ class mainCog(commands.Cog):
 					tmp_boss_information[0] = '``` ```'
 
 				embed = discord.Embed(
-					title = "----- 미예약 보스 -----",
+					title = "----- 잡지 않은 보스 -----",
 					description= tmp_boss_information[0],
 					color=0x0000ff
 					)
@@ -1684,126 +1651,6 @@ class mainCog(commands.Cog):
 		else:
 			return
 
-	################ 사다리 결과 출력 ################ 
-	@commands.command(name=command[12][0], aliases=command[12][1:])
-	async def ladder_(self, ctx : commands.Context, *, args : str = None):
-		if ctx.message.channel.id == basicSetting[7] or ctx.message.channel.id == basicSetting[8]:
-			if not args:
-				return await ctx.send(f'```명령어 [인원] [아이디1] [아이디2] ... 형태로 입력해주시기 바랍나다.```')
-
-			ladder = args.split()
-
-			try:
-				num_cong = int(ladder[0])  # 뽑을 인원
-				del(ladder[0])
-			except ValueError:
-				return await ctx.send(f'```뽑을 인원은 숫자로 입력바랍니다\nex)!사다리 1 가 나 다 ...```')
-
-			if num_cong >= len(ladder):
-				return await ctx.send(f'```추첨인원이 총 인원과 같거나 많습니다. 재입력 해주세요```')
-			
-			if len(ladder) > 20:
-				await LadderFunc(num_cong, ladder, ctx)
-				return
-
-			input_dict : dict = {}
-			ladder_description : list = []
-			ladder_data : list = []
-			output_list : list = []
-			result :dict = {}
-
-			for i in range(len(ladder)):
-				input_dict[f"{i+1}"] = ladder[i]
-				if i < num_cong:
-					output_list.append("o")
-				else:
-					output_list.append("x")
-
-			for i in range(len(ladder)+1):
-				tmp_list = []
-				if i%2 != 0:
-					sample_list = ["| |-", "| | "]
-				else:
-					sample_list = ["| | ", "|-| "]
-				for i in range(len(ladder)//2):
-					value = random.choice(sample_list)
-					tmp_list.append(value)
-				ladder_description.append(tmp_list)
-
-			tmp_result = list(input_dict.keys())
-			input_data : str = ""
-
-			for i in range(len(tmp_result)):
-				if int(tmp_result[i]) < 9:
-					input_data += f"{tmp_result[i]} "
-				else:
-					input_data += f"{tmp_result[i]}"
-			input_value_data = " ".join(list(input_dict.values()))
-
-			for i in range(len(ladder_description)):
-				if (len(ladder) % 2) != 0:
-					ladder_data.append(f"{''.join(ladder_description[i])}|\n")
-				else:
-					ladder_data.append(f"{''.join(ladder_description[i])[:-1]}\n")
-				
-				random.shuffle(output_list)
-
-			output_data = list(" ".join(output_list))
-
-			for line in reversed(ladder_data):
-				for i, x in enumerate(line):
-					if i % 2 == 1 and x == '-':
-						output_data[i-1], output_data[i+1] = output_data[i+1], output_data[i-1]
-
-			for i in range(output_data.count(" ")):
-				output_data.remove(" ")
-
-			for i in range(len(tmp_result)):
-				result[tmp_result[i]] = output_data[i]
-			result_str : str = ""
-			join_member : list = []
-			win_member : list = []
-			lose_member : list = []
-
-			for x, y in result.items():
-				join_member.append(f"{x}:{input_dict[f'{x}']}")
-				if y == "o":
-					win_member.append(f"{input_dict[f'{x}']}")
-				else :
-					lose_member.append(f"{input_dict[f'{x}']}")
-
-			embed = discord.Embed(title  = "🎲 사다리! 묻고 더블로 가!",
-				color=0x00ff00
-				)
-			embed.description = f"||```{input_data}\n{''.join(ladder_data)}{' '.join(output_list)}```||"
-			embed.add_field(name = "👥 참가자", value =  f"```fix\n{', '.join(join_member)}```", inline=False)
-			embed.add_field(name = "😍 당첨", value =  f"```fix\n{', '.join(win_member)}```")
-			embed.add_field(name = "😭 낙첨", value =  f"```{', '.join(lose_member)}```")
-			return await ctx.send(embed = embed)
-		else:
-			return
-
-	################ 정산확인 ################ 
-	@commands.command(name=command[13][0], aliases=command[13][1:])
-	async def jungsan_(self, ctx):
-		if ctx.message.channel.id == basicSetting[7] or ctx.message.channel.id == basicSetting[11]:
-			msg = ctx.message.content[len(ctx.invoked_with)+1:]
-			if basicSetting[10] !="" and basicSetting[12] !="" and basicSetting[14] !="" and basicSetting[15] !="" and basicSetting[16] !=""  :
-				SearchID = msg
-				gc = gspread.authorize(credentials)
-				wks = gc.open(basicSetting[12]).worksheet(basicSetting[14])
-
-				wks.update_acell(basicSetting[15], SearchID)
-
-				result = wks.acell(basicSetting[16]).value
-
-				embed = discord.Embed(
-						description= '```' + SearchID + ' 님이 받을 다이야는 ' + result + ' 다이야 입니다.```',
-						color=0xff00ff
-						)
-				await ctx.send(embed=embed, tts=False)
-		else:
-			return
 
 	################ 보스타임 일괄 설정 ################
 	@commands.command(name=command[14][0], aliases=command[14][1:])
@@ -1940,7 +1787,7 @@ class mainCog(commands.Cog):
 								hours, remainder = divmod(total_seconds,60*60)
 								minutes, seconds = divmod(remainder,60)
 
-								result_lefttime += '다음 ' + ouput_bossData[i][0] + '탐까지 %02d:%02d:%02d 남았습니다. ' % (hours,minutes,seconds) + '[' +  ouput_bossData[i][2] + ']\n'
+								result_lefttime += '다음 ' + ouput_bossData[i][0] + '젠까지 %02d:%02d:%02d 남았습니다. ' % (hours,minutes,seconds) + '[' +  ouput_bossData[i][2] + ']\n'
 				else :
 					for j in range(len(sorted_datelist)):
 						for i in range(len(ouput_bossData)):						
@@ -1951,7 +1798,7 @@ class mainCog(commands.Cog):
 								hours, remainder = divmod(total_seconds,60*60)
 								minutes, seconds = divmod(remainder,60)
 
-								result_lefttime += '다음 ' + ouput_bossData[i][0] + '탐까지 %02d:%02d:%02d 남았습니다. ' % (hours,minutes,seconds) + '[' +  ouput_bossData[i][2] + ']\n'
+								result_lefttime += '다음 ' + ouput_bossData[i][0] + '젠까지 %02d:%02d:%02d 남았습니다. ' % (hours,minutes,seconds) + '[' +  ouput_bossData[i][2] + ']\n'
 				embed = discord.Embed(
 					description= result_lefttime,
 					color=0xff0000
@@ -2126,7 +1973,7 @@ class mainCog(commands.Cog):
 							if ouput_bossData[i][5] == 0 :
 								boss_information[cnt] = boss_information[cnt] + ouput_bossData[i][3] + ' ' + ouput_bossData[i][2] + ' : ' + ouput_bossData[i][0] + ' ' + ouput_bossData[i][6] + '\n'
 							else :
-								boss_information[cnt] = boss_information[cnt] + ouput_bossData[i][3] + ' ' + ouput_bossData[i][2] + ' : ' + ouput_bossData[i][0] + ' (멍 ' + str(ouput_bossData[i][5]) + '회)' + ' ' + ouput_bossData[i][6] + '\n'
+								boss_information[cnt] = boss_information[cnt] + ouput_bossData[i][3] + ' ' + ouput_bossData[i][2] + ' : ' + ouput_bossData[i][0] + ' (놓친 횟수 ' + str(ouput_bossData[i][5]) + '회)' + ' ' + ouput_bossData[i][6] + '\n'
 
 			if len(boss_information) == 1 and len(tmp_boss_information) == 1:
 				###########################
@@ -2146,7 +1993,7 @@ class mainCog(commands.Cog):
 						color=0x0000ff
 						)
 				embed.add_field(
-						name="----- 미예약 보스 -----",
+						name="----- 잡지 않은 보스 -----",
 						value= tmp_boss_information[0],
 						inline = False
 						)				
@@ -2186,7 +2033,7 @@ class mainCog(commands.Cog):
 					tmp_boss_information[0] = '``` ```'
 
 				embed = discord.Embed(
-					title = "----- 미예약 보스 -----",
+					title = "----- 잡지 않은 보스 -----",
 					description= tmp_boss_information[0],
 					color=0x0000ff
 					)
@@ -2359,7 +2206,7 @@ class mainCog(commands.Cog):
 				tmp_boss_information[0] = '``` ```'
 
 			embed = discord.Embed(
-				title = "----- 미예약 보스 -----",
+				title = "----- 잡지 않은 보스 -----",
 				description= tmp_boss_information[0],
 				color=0x0000ff
 				)
@@ -2386,256 +2233,6 @@ class mainCog(commands.Cog):
 		else:
 			return
 
-	################ 킬초기화 ################ 
-	@commands.command(name=command[24][0], aliases=command[24][1:])
-	async def killInit_(self, ctx):
-		if ctx.message.channel.id == basicSetting[7] or ctx.message.channel.id == basicSetting[18]:
-			global kill_Data
-
-			kill_Data = {}
-			
-			await init_data_list('kill_list.ini', '-----척살명단-----')
-			return await ctx.send( '< 킬 목록 초기화완료 >', tts=False)
-		else:
-			return
-
-	################ 킬명단 확인 및 추가################ 
-	@commands.command(name=command[25][0], aliases=command[25][1:]) 
-	async def killList_(self, ctx, *, args : str = None):
-		if ctx.message.channel.id == basicSetting[7] or ctx.message.channel.id == basicSetting[18]:
-			global kill_Data
-
-			if not args:
-				kill_output = ''
-				for key, value in kill_Data.items():
-					kill_output += ':skull_crossbones: ' + str(key) + ' : ' + str(value) + '번 따히!\n'
-
-				if kill_output != '' :
-					embed = discord.Embed(
-							description= str(kill_output),
-							color=0xff00ff
-							)
-				else :
-					embed = discord.Embed(
-							description= '등록된 킬 목록이 없습니다. 분발하세요!',
-							color=0xff00ff
-							)
-				return await ctx.send(embed=embed, tts=False)
-
-			if args in kill_Data:
-				kill_Data[args] += 1
-			else:
-				kill_Data[args] = 1
-					
-			embed = discord.Embed(
-					description= ':skull_crossbones: ' + args + ' 따히! [' + str(kill_Data[args]) + '번]\n',
-					color=0xff00ff
-					)
-			return await ctx.send(embed=embed, tts=False)
-		else:
-			return
-
-	################ 킬삭제 ################ 
-	@commands.command(name=command[26][0], aliases=command[26][1:])
-	async def killDel_(self, ctx, *, args : str = None):
-		if ctx.message.channel.id == basicSetting[7] or ctx.message.channel.id == basicSetting[18]:
-			global kill_Data
-			
-			if not args:
-				return await ctx.send( '```제대로 된 아이디를 입력해주세요!\n```', tts=False)
-			
-			if args in kill_Data:
-				del kill_Data[args]
-				return await ctx.send( ':angel: ' + args + ' 삭제완료!', tts=False)
-			else :				
-				return await ctx.send( '```킬 목록에 등록되어 있지 않습니다!\n```', tts=False)
-		else:
-			return
-
-	################ 킬 차감 ################ 
-	@commands.command(name=command[33][0], aliases=command[33][1:]) 
-	async def killSubtract_(self, ctx, *, args : str = None):
-		if ctx.message.channel.id == basicSetting[7] or ctx.message.channel.id == basicSetting[18]:
-			global kill_Data
-
-			if not args:
-				return await ctx.send(f'{command[33][0]} [아이디] 혹은 {command[33][0]} [아이디] [횟수] 양식에 맞춰 입력해주세요!', tts = False)
-
-			input_data = args.split()
-			
-			if len(input_data) == 1:
-				kill_name = args
-				count = 1
-			elif len(input_data) == 2:
-				kill_name = input_data[0]
-				try:
-					count = int(input_data[1])
-				except ValueError:
-					return await ctx.send(f'[횟수]는 숫자로 입력바랍니다')
-			else:
-				return await ctx.send(f'{command[33][0]} [아이디] 혹은 {command[33][0]} [아이디] [횟수] 양식에 맞춰 입력해주세요!', tts = False)
-
-			if kill_name in kill_Data:
-				if kill_Data[kill_name] < int(count):
-					return await ctx.send( f"등록된 킬 횟수[{str(kill_Data[kill_name])}번]보다 차감 횟수[{str(count)}번]가 많습니다. 킬 횟수에 맞게 재입력 바랍니다.", tts=False)
-				else:
-					kill_Data[kill_name] -= int(count)
-			else:
-				return await ctx.send( '```킬 목록에 등록되어 있지 않습니다!\n```', tts=False)
-					
-			embed = discord.Embed(
-					description= f':angel: [{kill_name}] [{str(count)}번] 차감 완료! [잔여 : {str(kill_Data[kill_name])}번]\n',
-					color=0xff00ff
-					)
-			
-			if kill_Data[kill_name] == 0:
-				del kill_Data[kill_name]
-
-			return await ctx.send(embed=embed, tts=False)
-		else:
-			return
-
-	################ 경주 ################ 
-	@commands.command(name=command[27][0], aliases=command[27][1:])
-	async def race_(self, ctx):
-		if ctx.message.channel.id == basicSetting[7] or ctx.message.channel.id == basicSetting[19]:
-			msg = ctx.message.content[len(ctx.invoked_with)+1:]
-			race_info = []
-			fr = []
-			racing_field = []
-			str_racing_field = []
-			cur_pos = []
-			race_val = []
-			random_pos = []
-			racing_result = []
-			output = ':camera: :camera: :camera: 신나는 레이싱! :camera: :camera: :camera:\n'
-			#racing_unit = [':giraffe:', ':elephant:', ':tiger2:', ':hippopotamus:', ':crocodile:',':leopard:',':ox:', ':sheep:', ':pig2:',':dromedary_camel:',':dragon:',':rabbit2:'] #동물스킨
-			#racing_unit = [':red_car:', ':taxi:', ':bus:', ':trolleybus:', ':race_car:', ':police_car:', ':ambulance:', ':fire_engine:', ':minibus:', ':truck:', ':articulated_lorry:', ':tractor:', ':scooter:', ':manual_wheelchair:', ':motor_scooter:', ':auto_rickshaw:', ':blue_car:', ':bike:', ':helicopter:', ':steam_locomotive:']  #탈것스킨
-			#random.shuffle(racing_unit) 
-			racing_member = msg.split(" ")
-
-			racing_unit = []
-
-			emoji = discord.Emoji
-			emoji = ctx.message.guild.emojis
-
-			for j in range(len(tmp_racing_unit)):
-				racing_unit.append(':' + tmp_racing_unit[j] + ':')
-				for i in range(len(emoji)):
-					if emoji[i].name == tmp_racing_unit[j].strip(":"):
-						racing_unit[j] = '<:' + tmp_racing_unit[j] + ':' + str(emoji[i].id) + '>'
-
-			random.shuffle(racing_unit)
-
-			field_size = 60
-			tmp_race_tab = 35 - len(racing_member)
-			if len(racing_member) <= 1:
-				await ctx.send('레이스 인원이 2명보다 작습니다.')
-				return
-			elif len(racing_member) >= 13:
-				await ctx.send('레이스 인원이 12명 초과입니다.')
-				return
-			else :
-				race_val = random.sample(range(tmp_race_tab, tmp_race_tab+len(racing_member)), len(racing_member))
-				random.shuffle(race_val)
-				for i in range(len(racing_member)):
-					fr.append(racing_member[i])
-					fr.append(racing_unit[i])
-					fr.append(race_val[i])
-					race_info.append(fr)
-					fr = []
-					for i in range(field_size):
-						fr.append(" ")
-					racing_field.append(fr)
-					fr = []
-
-				for i in range(len(racing_member)):
-					racing_field[i][0] = "|"
-					racing_field[i][field_size-2] = race_info[i][1]
-					if len(race_info[i][0]) > 5:
-						racing_field[i][field_size-1] = "| " + race_info[i][0][:5] + '..'
-					else:
-						racing_field[i][field_size-1] = "| " + race_info[i][0]
-					str_racing_field.append("".join(racing_field[i]))
-					cur_pos.append(field_size-2)
-				
-				for i in range(len(racing_member)):
-					output +=  str_racing_field[i] + '\n'
-
-				result_race = await ctx.send(output + ':traffic_light: 3초 후 경주가 시작됩니다!')
-				await asyncio.sleep(1)
-				await result_race.edit(content = output + ':traffic_light: 2초 후 경주가 시작됩니다!')
-				await asyncio.sleep(1)
-				await result_race.edit(content = output + ':traffic_light: 1초 후 경주가 시작됩니다!')
-				await asyncio.sleep(1)
-				await result_race.edit(content = output + ':checkered_flag:  경주 시작!')								
-
-				for i in range(len(racing_member)):
-					test = random.sample(range(2,field_size-2), race_info[i][2])
-					while len(test) != tmp_race_tab + len(racing_member)-1 :
-						test.append(1)
-					test.append(1)
-					test.sort(reverse=True)
-					random_pos.append(test)
-
-				for j in range(len(random_pos[0])):
-					if j%2 == 0:
-						output =  ':camera: :camera_with_flash: :camera: 신나는 레이싱! :camera_with_flash: :camera: :camera_with_flash:\n'
-					else :
-						output =  ':camera_with_flash: :camera: :camera_with_flash: 신나는 레이싱! :camera: :camera_with_flash: :camera:\n'
-					str_racing_field = []
-					for i in range(len(racing_member)):
-						temp_pos = cur_pos[i]
-						racing_field[i][random_pos[i][j]], racing_field[i][temp_pos] = racing_field[i][temp_pos], racing_field[i][random_pos[i][j]]
-						cur_pos[i] = random_pos[i][j]
-						str_racing_field.append("".join(racing_field[i]))
-
-					await asyncio.sleep(1) 
-
-					for i in range(len(racing_member)):
-						output +=  str_racing_field[i] + '\n'
-					
-					await result_race.edit(content = output + ':checkered_flag:  경주 시작!')
-				
-				for i in range(len(racing_field)):
-					fr.append(race_info[i][0])
-					fr.append((race_info[i][2]) - tmp_race_tab + 1)
-					racing_result.append(fr)
-					fr = []
-
-				result = sorted(racing_result, key=lambda x: x[1])
-
-				result_str = ''
-				for i in range(len(result)):
-					if result[i][1] == 1:
-						result[i][1] = ':first_place:'
-					elif result[i][1] == 2:
-						result[i][1] = ':second_place:'
-					elif result[i][1] == 3:
-						result[i][1] = ':third_place:'
-					elif result[i][1] == 4:
-						result[i][1] = ':four:'
-					elif result[i][1] == 5:
-						result[i][1] = ':five:'
-					elif result[i][1] == 6:
-						result[i][1] = ':six:'
-					elif result[i][1] == 7:
-						result[i][1] = ':seven:'
-					elif result[i][1] == 8:
-						result[i][1] = ':eight:'
-					elif result[i][1] == 9:
-						result[i][1] = ':nine:'
-					elif result[i][1] == 10:
-						result[i][1] = ':keycap_ten:'
-					else:
-						result[i][1] = ':x:'
-					result_str += result[i][1] + "  " + result[i][0] + "  "
-					
-				#print(result)
-				await asyncio.sleep(1)
-				return await result_race.edit(content = output + ':tada: 경주 종료!\n' + result_str)
-		else:
-			return
 
 	################ 보탐봇 입장 ################ 	
 	@commands.command(name=command[28][0], aliases=command[28][1:])
@@ -2733,151 +2330,6 @@ class mainCog(commands.Cog):
 		else :
 			return await ctx.send(f'```올바른 명령어를 입력해주세요.```', tts=False)
 
-	################ 아이템초기화 확인 ################ 
-	@commands.command(name=command[29][0], aliases=command[29][1:])
-	async def itemInit_(self, ctx):
-		if ctx.message.channel.id == basicSetting[7] or ctx.message.channel.id == basicSetting[20]:
-			global item_Data
-
-			item_Data = {}
-
-			await init_data_list('item_list.ini', '-----아이템 목록-----')
-			return await ctx.send( '< 아이템 목록 초기화완료 >', tts=False)
-		else:
-			return
-
-	################ 아이템 목록 확인 및 추가 ################ 
-	@commands.command(name=command[30][0], aliases=command[30][1:]) 
-	async def itemList_(self, ctx, *, args : str = None):
-		if ctx.message.channel.id == basicSetting[7] or ctx.message.channel.id == basicSetting[20]:
-			global item_Data
-			
-			if not args:
-				sorted_item_list = sorted(item_Data.items(), key=lambda x: x[0])
-
-				embed_list : list = []
-				embed_index : int = 0
-				embed_cnt : int = 0
-				embed = discord.Embed(title = '', description = f'`{self.bot.user.name}\'s 창고`', color = 0x00ff00)
-				
-				embed_list.append(embed)
-
-				if len(sorted_item_list) > 0 :
-					for item_id, count in sorted_item_list:
-						embed_cnt += 1
-						if embed_cnt > 24 :
-							embed_cnt = 0
-							embed_index += 1
-							tmp_embed = discord.Embed(
-								title = "",
-								description = "",
-								color=0x00ff00
-								)
-							embed_list.append(tmp_embed)
-						embed_list[embed_index].add_field(name = item_id, value = count)
-					embed_list[len(embed_list)-1].set_footer(text = f"전체 아이템 종류  :  {len(item_Data)}개")
-					if len(embed_list) > 1:
-						for embed_data in embed_list:
-							await asyncio.sleep(0.1)
-							await ctx.send(embed = embed_data)
-						return
-					else:
-						return await ctx.send(embed=embed, tts=False)
-				else :
-					embed.add_field(name = '\u200b\n', value = '창고가 비었습니다.\n\u200b')
-					return await ctx.send(embed=embed, tts=False)
-
-			input_data = args.split()
-			
-			if len(input_data) == 1:
-				item_name = args
-				count = 1
-			elif len(input_data) == 2:
-				item_name = input_data[0]
-				try:
-					count = int(input_data[1])
-				except ValueError:
-					return await ctx.send(f'아이템 [개수]는 숫자로 입력바랍니다')
-			else:
-				return await ctx.send(f'{command[30][0]} [아이템명] 혹은 {command[30][0]} [아이템명] [개수] 양식에 맞춰 입력해주세요!', tts = False)	
-
-			if item_name in item_Data:
-				item_Data[item_name] += int(count)
-			else:
-				item_Data[item_name] = int(count)
-					
-			embed = discord.Embed(
-					description= f':inbox_tray: **[{item_name}] [{str(count)}개]** 등록 완료! [잔여 : {str(item_Data[item_name])}개]\n',
-					color=0xff00ff
-					)
-			return await ctx.send(embed=embed, tts=False)
-
-		else:
-			return
-
-	################ 아이템 삭제 ################ 
-	@commands.command(name=command[31][0], aliases=command[31][1:])
-	async def itemDel_(self, ctx, *, args : str = None):
-		if ctx.message.channel.id == basicSetting[7] or ctx.message.channel.id == basicSetting[20]:
-			global item_Data
-
-			if not args:
-				return await ctx.send( f'{command[31][0]} [아이템명] 양식에 맞춰 입력해주세요!', tts = False)
-
-			if args in item_Data:
-				del item_Data[args]
-				embed = discord.Embed(
-					description= ':outbox_tray: ' + args + ' 삭제완료!',
-					color=0xff00ff
-					)
-				return await ctx.send(embed=embed, tts=False)
-			else :				
-				return await ctx.send( '```아이템 목록에 등록되어 있지 않습니다!\n```', tts=False)
-		else:
-			return
-
-	################ 아이템 차감 ################ 
-	@commands.command(name=command[32][0], aliases=command[32][1:]) 
-	async def itemSubtract_(self, ctx, *, args : str = None):
-		if ctx.message.channel.id == basicSetting[7] or ctx.message.channel.id == basicSetting[20]:
-			global item_Data
-
-			if not args:
-				return await ctx.send(f'{command[32][0]} [아이템명] 혹은 {command[32][0]} [아이템명] [개수] 양식에 맞춰 입력해주세요!', tts = False)
-
-			input_data = args.split()
-			
-			if len(input_data) == 1:
-				item_name = args
-				count = 1
-			elif len(input_data) == 2:
-				item_name = input_data[0]
-				try:
-					count = int(input_data[1])
-				except ValueError:
-					return await ctx.send(f'아이템 [개수]는 숫자로 입력바랍니다')
-			else:
-				return await ctx.send(f'{command[32][0]} [아이템명] 혹은 {command[32][0]} [아이템명] [개수] 양식에 맞춰 입력해주세요!', tts = False)	
-
-			if item_name in item_Data:
-				if item_Data[item_name] < int(count):
-					return await ctx.send( f"등록된 아이템 개수[{str(item_Data[item_name])}개]보다 차감 개수[{str(count)}개]가 많습니다. 등록 개수에 맞게 재입력 바랍니다.", tts=False)
-				else:
-					item_Data[item_name] -= int(count)
-			else:
-				return await ctx.send( '```아이템 목록에 등록되어 있지 않습니다!\n```', tts=False)
-					
-			embed = discord.Embed(
-					description= f':outbox_tray: **[{item_name}] [{str(count)}개]** 차감 완료! [잔여 : {str(item_Data[item_name])}개]\n',
-					color=0xff00ff
-					)
-			
-			if item_Data[item_name] == 0:
-				del item_Data[item_name]
-
-			return await ctx.send(embed=embed, tts=False)
-		else:
-			return
 
 	################ 서버 나가기 ################ 		
 	@commands.has_permissions(manage_messages=True)
@@ -2910,129 +2362,6 @@ class mainCog(commands.Cog):
 			except ValueError:
 				return			
 
-	################ 수수료 계산기 ################ 
-	@commands.command(name=command[35][0], aliases=command[35][1:])
-	async def tax_check(self, ctx, *, args : str = None):
-		if ctx.message.channel.id == basicSetting[7] or ctx.message.channel.id == basicSetting[22]:
-			if not args:
-				return await ctx.send(f"**{command[35][0]} [판매금액] (거래소세금)** 양식으로 입력 해주세요\n※ 거래소세금은 미입력시 5%입니다.")
-			
-			input_money_data : list = args.split()
-			len_input_money_data = len(input_money_data)
-
-			try:
-				for i in range(len_input_money_data):
-					input_money_data[i] = int(input_money_data[i])
-			except ValueError:
-				return await ctx.send(f"**[판매금액] (거래소세금)**은 숫자로 입력 해주세요.")
-
-			if len_input_money_data < 1 or len_input_money_data > 3:
-				return await ctx.send(f"**{command[35][0]} [판매금액] (거래소세금)** 양식으로 입력 해주세요\n※ 거래소세금은 미입력시 5%입니다.")
-			elif len_input_money_data == 2:
-				tax = input_money_data[1]
-			else:
-				tax = 5
-
-			price_first_tax = int(input_money_data[0] * ((100-tax)/100))
-			price_second_tax = int(price_first_tax * ((100-tax)/100))
-			price_rev_tax = int((input_money_data[0] * 100)/(100-tax)+0.5)
-
-			embed = discord.Embed(
-					title = f"🧮  수수료 계산결과 (세율 {tax}% 기준) ",
-					description = f"",
-					color=0x00ff00
-					)
-			embed.add_field(name = "⚖️ 수수료 지원", value = f"```등록가 : {price_rev_tax}\n수령가 : {input_money_data[0]}\n세 금 : {price_rev_tax-input_money_data[0]}```")
-			embed.add_field(name = "⚖️ 1차 거래", value = f"```등록가 : {input_money_data[0]}\n정산가 : {price_first_tax}\n세 금 : {input_money_data[0]-price_first_tax}```")
-			embed.add_field(name = "⚖️ 2차 거래", value = f"```등록가 : {price_first_tax}\n정산가 : {price_second_tax}\n세 금 : {price_first_tax-price_second_tax}```")
-			return await ctx.send(embed = embed)
-		else:
-			return
-
-	################ 페이백 계산기 ################ 
-	@commands.command(name=command[36][0], aliases=command[36][1:])
-	async def payback_check(self, ctx, *, args : str = None):
-		if ctx.message.channel.id == basicSetting[7] or ctx.message.channel.id == basicSetting[22]:
-			if not args:
-				return await ctx.send(f"**{command[36][0]} [거래소가격] [실거래가] (거래소세금)** 양식으로 입력 해주세요\n※ 거래소세금은 미입력시 5%입니다.")
-			
-			input_money_data : list = args.split()
-			len_input_money_data = len(input_money_data)
-
-			try:
-				for i in range(len_input_money_data):
-					input_money_data[i] = int(input_money_data[i])
-			except ValueError:
-				return await ctx.send(f"**[판매금액] (거래소세금)**은 숫자로 입력 해주세요.")
-
-			if len_input_money_data < 2 or len_input_money_data > 4:
-				return await ctx.send(f"**{command[36][0]} [거래소가격] [실거래가] (거래소세금)** 양식으로 입력 해주세요\n※ 거래소세금은 미입력시 5%입니다.")
-			elif len_input_money_data == 3:
-				tax = input_money_data[2]
-			else:
-				tax = 5
-
-			price_reg_tax = int(input_money_data[0] * ((100-tax)/100))
-			price_real_tax = int(input_money_data[1] * ((100-tax)/100))
-
-			reault_payback = price_reg_tax - price_real_tax
-			reault_payback1= price_reg_tax - input_money_data[1]
-
-			embed = discord.Embed(
-					title = f"🧮  페이백 계산결과1 (세율 {tax}% 기준) ",
-					description = f"**```fix\n{reault_payback}```**",
-					color=0x00ff00
-					)
-			embed.add_field(name = "⚖️ 거래소", value = f"```등록가 : {input_money_data[0]}\n정산가 : {price_reg_tax}\n세 금 : {input_money_data[0]-price_reg_tax}```")
-			embed.add_field(name = "🕵️ 실거래", value = f"```등록가 : {input_money_data[1]}\n정산가 : {price_real_tax}\n세 금 : {input_money_data[1]-price_real_tax}```")
-			await ctx.send(embed = embed)
-
-			embed2 = discord.Embed(
-					title = f"🧮  페이백 계산결과2 (세율 {tax}% 기준) ",
-					description = f"**```fix\n{reault_payback1}```**",
-					color=0x00ff00
-					)
-			embed2.add_field(name = "⚖️ 거래소", value = f"```등록가 : {input_money_data[0]}\n정산가 : {price_reg_tax}\n세 금 : {input_money_data[0]-price_reg_tax}```")
-			embed2.add_field(name = "🕵️ 실거래", value = f"```내판가 : {input_money_data[1]}```")
-			return await ctx.send(embed = embed2)
-		else:
-			return
-
-	@commands.command(name=command[37][0], aliases=command[37][1:])
-	async def command_rock_paper_scissors_game(self, ctx : commands.Context):
-		if ctx.message.channel.id != basicSetting[7] and ctx.message.channel.id != basicSetting[19]:
-			return
-
-		message_rock_paper_scissors : discord.message.Message = await ctx.send("안내면 진거 가위바위..")
-		reaction_emoji : list = ["✌️", "✊", "✋"]
-
-		for emoji in reaction_emoji:
-			await message_rock_paper_scissors.add_reaction(emoji)
-
-		def reaction_check(reaction, user):
-			return (reaction.message.id == message_rock_paper_scissors.id) and (user.id == ctx.author.id) and (str(reaction) in reaction_emoji)
-		try:
-			reaction_result, user = await self.bot.wait_for('reaction_add', check = reaction_check, timeout = int(basicSetting[5]))
-		except asyncio.TimeoutError:
-			return await ctx.send(f"시간이 초과됐습니다. ")
-		
-		bot_result : str = random.choice(reaction_emoji)
-		result_rock_paper_scissors : str = ""
-		
-		if reaction_result is None:
-			result_rock_paper_scissors = f"왜 안냄?"
-		elif str(reaction_result) == bot_result:
-			result_rock_paper_scissors = f"봇 {bot_result} : {reaction_result} {ctx.author.mention}\n🤔비겼다!"
-		elif str(reaction_result) == "✌️" and bot_result == "✋":
-			result_rock_paper_scissors = f"봇 {bot_result} : {reaction_result} {ctx.author.mention}\n👍짝짝짝"
-		elif str(reaction_result) == "✊" and bot_result == "✌️":
-			result_rock_paper_scissors = f"봇 {bot_result} : {reaction_result} {ctx.author.mention}\n👍짝짝짝"
-		elif str(reaction_result) == "✋" and bot_result == "✊":
-			result_rock_paper_scissors = f"봇 {bot_result} : {reaction_result} {ctx.author.mention}\n👍짝짝짝"
-		else:
-			result_rock_paper_scissors = f"봇 {bot_result} : {reaction_result} {ctx.author.mention}\n🤪저런.."
-
-		return await ctx.send(result_rock_paper_scissors)
 
 	################ 보이스사용 ################ 
 	@commands.command(name=command[38][0], aliases=command[38][1:])
@@ -3398,7 +2727,7 @@ class IlsangDistributionBot(commands.AutoShardedBot):
 										)
 								await self.get_channel(channel).send(embed=embed, tts=False)
 							else:
-								await self.get_channel(channel).send('```' + bossData[i][0] + '탐이 아직 안됐습니다. 다음 ' + bossData[i][0] + '탐 [' + tmp_bossTimeString[i] + '] 입니다```', tts=False)
+								await self.get_channel(channel).send('```' + bossData[i][0] + '젠이 아직 안됐습니다. 다음 ' + bossData[i][0] + '젠 [' + tmp_bossTimeString[i] + '] 입니다```', tts=False)
 
 						
 				################ 예상 보스 타임 입력 ################ 
@@ -3493,7 +2822,7 @@ class IlsangDistributionBot(commands.AutoShardedBot):
 	async def close(self):
 		await self.session.close()
 		await super().close()
-		print("일상디코봇 종료 완료.")
+		print("악인 알리미 종료 완료.")
 
 ilsang_distribution_bot : IlsangDistributionBot = IlsangDistributionBot()
 ilsang_distribution_bot.add_cog(mainCog(ilsang_distribution_bot))
